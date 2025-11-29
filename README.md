@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🛡️ Système QHSE Manager Pro
 
 Application complète de gestion **Qualité, Hygiène, Sécurité et Environnement** avec 14 modules intégrés.
@@ -25,3 +26,7 @@ Application complète de gestion **Qualité, Hygiène, Sécurité et Environneme
 cd backend
 pip install -r requirements.txt
 python main.py
+=======
+# qhse-app
+Application QHSE - Qualité Hygiène Sécurité Environnement
+>>>>>>> f1d4a9f5f80060c48bb3ded27117eff622812ed5
