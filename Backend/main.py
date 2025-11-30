@@ -4,19 +4,19 @@ from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import aiofiles
-import psycopg2
-from psycopg2.extras import DictCursor
+import psycopg
+from psycopg.rows import dict_row
 
 
 # ================================
 # 🔵 CONFIGURATION BASE DE DONNÉES
 # ================================
 def get_db_connection():
-    conn = psycopg2.connect(
+    conn = psycopg.connect(
         os.environ.get("DATABASE_URL"),
-        cursor_factory=DictCursor
+        autocommit=True,
+        row_factory=dict_row
     )
-    conn.autocommit = True
     return conn
 
 
@@ -75,7 +75,6 @@ def get_all_epi():
     cur = conn.cursor()
     cur.execute("SELECT * FROM epi")
     data = cur.fetchall()
-    cur.close()
     conn.close()
     return data
 
@@ -94,8 +93,6 @@ def create_epi(epi: EPI):
             epi.marque, epi.taille, epi.dateRemise, epi.dateExpiration, epi.statut
         )
     )
-    conn.commit()
-    cur.close()
     conn.close()
     return epi
 
@@ -117,8 +114,6 @@ def update_epi(epi_id: str, epi: EPI):
             epi_id
         )
     )
-    conn.commit()
-    cur.close()
     conn.close()
     return {"message": "ÉPI mis à jour"}
 
@@ -128,8 +123,6 @@ def delete_epi(epi_id: str):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("DELETE FROM epi WHERE id = %s", (epi_id,))
-    conn.commit()
-    cur.close()
     conn.close()
     return {"message": "ÉPI supprimé"}
 
@@ -156,8 +149,6 @@ def delete_report(id: str):
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("DELETE FROM rapport WHERE id = %s", (id,))
-    conn.commit()
-    cur.close()
     conn.close()
     return {"message": "Rapport supprimé"}
 
